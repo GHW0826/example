@@ -27,8 +27,14 @@ public:
         */
         bool expected = false;
         bool desired = true;
-        while (locked_.compare_exchange_strong(expected, desired) == false)
+        while (locked_.compare_exchange_strong(expected, desired) == false) {
             expected = false;
+            
+            // this_thread::sleep_for(chrono::microseconds(1000));
+            // this_thread::sleep_for(100ms);
+            // CPU 할당 취소
+            // this_thread::yield();
+        }
 
         locked_.store(true);
     }
